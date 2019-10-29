@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Async Searchbar with Javascript</title>
+<link href="style.css" rel="stylesheet" />
+</head>
+
+<body>
+	<div class="main">
+		<div class="searchbarcontainer">
+			<section>
+				<div class="searchinputcontainer">
+					<div><h3>Search for Countries</h3></div>
+					<div class="searchinput">
+						<input onkeyup="searchresult(this.value)" type="text" name="search" id="search" class="textinput" />
+						<div class="searchinput-close" onclick="closeautocomplete()">X</div>
+					</div>
+					<div class="autocompletecontainer" id="autocompletecontainer"></div>
+				</div>
+			</section>
+			<section>
+				<div class="searchresults">
+					<div class="searchhistory">
+						<div class="searchhistory-title">Search History</div>
+						<div class="searchhistory-close">
+							<a href="javascript:void(0)" onclick="clearhistory();">Clear search history</a>
+						</div>
+					</div>
+					<div class="searchhistory-list" id="searchhistory-list"></div>
+				<div>
+			</section>
+		</div>
+	</div>
+	
+	<script>
+	listsearchresult();			//list Search history while page loading
+
+	/*List out the search history below search bar*/
+	function listsearchresult(){
+		var countrylist, countryarr, searchresultlist, searchresultlistfinal="";
+		countrylist = localStorage.getItem("country");
+		if(countrylist!=null){
+			countryarr = (countrylist.split("|")).reverse();
+			for(var i=0; i<countryarr.length;i++){
+				countrytimearr = countryarr[i].split("~");
+				searchresultlist = `<div class="searchhistory-list-item">
+							<div class="searchhistory-list-title">${countrytimearr[0]}</div>
+							<div class="searchhistory-list-time">${countrytimearr[1]}</div>
+							<div class="searchhistory-list-close" onclick="clearsearchitem('${countrytimearr[0]}')">x</div>
+						</div>`;
+				searchresultlistfinal = searchresultlistfinal.concat("",searchresultlist);
+			}
+		}
+		else{
+			searchresultlistfinal = "You have no search history";
+		}
+		document.getElementById("searchhistory-list").innerHTML=searchresultlistfinal;
+	}
+
+	/*Delete an item in search history*/
+	function clearsearchitem(item){
+		var countrylist, countryarr, countryindex;
+		countrylist = localStorage.getItem("country");
+		countryarr = countrylist.split(/[|]/);
+		for(var i=0;i<countryarr.length;i++){
+			if(countryarr[i].indexOf(item+'~')){
+				countryindex = i;
+			}
+		}
+		if(countryindex != -1){
+			if(countryarr.length>1){
+				countryarr.splice(countryindex, 1);
+				countrylist = 	countryarr.join('|');
+				localStorage.setItem("country", countrylist);
+			}
+			else{
+				localStorage.clear();
+			}			
+		}
+			
+		listsearchresult();
+	}
+
+	/*Clear the entire search history*/
+	function clearhistory(){
+		localStorage.clear();
+		listsearchresult();
+	}
+
+	/*close auto-complete list*/	
+	function closeautocomplete(){
+		document.getElementById("autocompletecontainer").innerHTML = "";
+		document.getElementById("search").value = "";
+	}
+
+	/*Add the selected item from search auto-comlete list to Search history*/
+	function addtolist(country){
+		var storeditems, countryarr, countrystr, timestamp, hour, period='am';
+		var today = new Date();
+		hour = today.getHours();
+		if(hour>12){
+			hour = today.getHours()-12;
+			period = "pm";
+		}
+		timestamp = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+', '+addZero(hour) + ":" + addZero(today.getMinutes())+" "+period;
+		storeditems = localStorage.getItem("country");
+		itemtostore = country+"~"+timestamp;
+		if(storeditems==null){
+			localStorage.setItem("country", itemtostore);
+		}
+		else{
+			countryarr = storeditems.split("|");
+			countryarr.push(itemtostore);
+			countrystr = countryarr.join('|');
+			localStorage.setItem("country", countrystr);
+		}
+		listsearchresult();
+		closeautocomplete();
+	}
+
+	/*List out search result when user type-in search input*/
+	function searchresult(str){
+		var xhttp;
+		var apiurl = "http://geodb-free-service.wirefreethought.com/v1/geo/countries?limit=5&offset=0&namePrefix=";
+		if (str.length == 0) {
+		document.getElementById("autocompletecontainer").innerHTML = "";
+		return;
+		}
+		xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				var result = (JSON.parse(this.responseText)).data;
+				document.getElementById("autocompletecontainer").innerHTML = "";
+				
+				for(var i=0; i<result.length; i++){
+					var listelement = document.createElement("div"); 
+					var country = document.createTextNode(result[i].name);
+					listelement.appendChild(country);
+					listelement.setAttribute("onclick", "addtolist('"+result[i].name+"')");
+					document.getElementById("autocompletecontainer").appendChild(listelement);
+				}
+			}
+		};
+		xhttp.open("GET", apiurl+str, true);
+		xhttp.send();
+	}
+
+	/*Helper utility function*/
+	function addZero(num){
+	  if (num < 10) {
+		num = "0" + num;
+	  }
+	  return num;
+	}
+	</script>
+</body>
+</html>
