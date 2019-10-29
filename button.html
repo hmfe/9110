@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Style Button with CSS</title>
+<style>
+.delete-button{
+	width: 272px;
+    height: 142px;
+    font-size: 42px;
+    font-weight: 600;
+    background-image: linear-gradient(to right,#F6AC65,#EF9646);
+    border: 2px solid #897E72;
+    align-items: center;
+    display: flex;
+    padding-left: 15px;
+}
+.delete-button:after{
+	content: 'x';
+    background-color: #fff;
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    border-radius: 50px;
+    font-size: 75px;
+    font-weight: 400;
+    margin-left: 10px;
+}
+</style>
+</head>
+
+<body>
+	<button class="delete-button">Delete</button>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+.main{
+	text-align: center;
+    background-color: #ffffff;
+}
+.searchbarcontainer{
+	background-color: #F5F5F5;
+    margin: 0 auto;
+    text-align: center;
+    display: inline-block;
+	padding: 5px;
+	width: 400px;
+}
+.searchbarcontainer .searchinputcontainer .textinput{	
+    width: 88%;
+    height: 35px;
+    padding: 5px;
+    font-size: 18px;
+	border: none;
+}
+.searchbarcontainer .searchinputcontainer .searchinput{
+	background-color: #ffffff;
+	border: 2px solid #aaaaaa;
+}
+.searchbarcontainer .searchinputcontainer .searchinput-close{
+	width: 5%;
+    display: inline-block;
+	cursor: pointer;
+}
+.searchbarcontainer .searchinputcontainer .textinput:after{
+	content: 'x';
+}
+.searchbarcontainer .searchinputcontainer .autocompletecontainer div {
+    padding: 5px;
+    background-color: #fff;
+    text-align: left;
+}
+.searchbarcontainer .searchinputcontainer .autocompletecontainer div:hover {
+    background-color: #f1f1f1;	
+	cursor: pointer;
+}
+.searchbarcontainer .searchresults .searchhistory {
+    width: 100%;
+	border-bottom: 1px solid #a8a8a8;
+	padding: 5px 0;
+}
+.searchbarcontainer .searchresults .searchhistory-close {
+    width: 35%;
+    text-align: right;
+    display: inline-block;
+    font-size: 12px;
+	cursor: pointer;
+}
+.searchbarcontainer .searchresults .searchhistory-list{
+	padding: 5px 0;
+}
+.searchbarcontainer .searchresults .searchhistory-title{
+	width: 60%;
+    text-align: left;
+    font-weight: 600;
+    padding: 5px;
+    display: inline-block;
+}
+.searchbarcontainer .searchresults .searchhistory-list-item {
+	border-bottom: 1px solid #a8a8a8;
+    padding: 5px 0;
+}
+.searchbarcontainer .searchresults .searchhistory-list-title {
+    width: 60%;
+    display: inline-block;
+    text-align: left;
+}
+.searchbarcontainer .searchresults .searchhistory-list-time {
+    width: 30%;
+    display: inline-block;
+    text-align: left;
+    font-size: 12px;
+}
+.searchbarcontainer .searchresults .searchhistory-list-close {
+    display: inline;
+    text-align: right;
+	cursor: pointer;
+}
